@@ -529,18 +529,16 @@ $("form").addEventListener("submit", e => {
   input.blur();
 });
 
-/* Restore search values from the URL */
-const params = new URLSearchParams(location.search);
-const start = params.get("mpl");
-const startMobile = params.get("mobile");
+/* Always start with an empty search when someone opens or shares the page.
+   Remove any old customer details from the URL so they are not prefilled/shared. */
+const cleanUrl = new URL(location.href);
+cleanUrl.searchParams.delete("mpl");
+cleanUrl.searchParams.delete("mobile");
+history.replaceState(null, "", cleanUrl.pathname + cleanUrl.hash);
 
-if (start && startMobile){
-  input.value = start.toUpperCase();
-  $("mobile").value = startMobile;
-  search(start, startMobile);
-} else {
-  input.focus();
-}
+input.value = "";
+$("mobile").value = "";
+input.focus();
 </script>
 </body>
 </html>
